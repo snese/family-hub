@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>情境試算 — VR200 爆擊組合 vs 現有部位</title>
+<style>
+:root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --yellow:#d29922; --orange:#f0883e; --red:#f85149; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:-apple-system,"Helvetica Neue","PingFang TC","Noto Sans TC",sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding:16px; max-width:1100px; margin:auto; }
+h1 { font-size:22px; margin-bottom:6px; }
+h2 { font-size:18px; margin:24px 0 8px; padding-bottom:6px; border-bottom:2px solid var(--accent); }
+h3 { font-size:15px; margin:16px 0 6px; color:var(--accent); }
+.sub { color:var(--muted); font-size:13px; margin-bottom:16px; }
+.nav { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin-bottom:16px; }
+.nav a { color:var(--accent); text-decoration:none; margin-right:14px; font-size:13px; }
+table { width:100%; border-collapse:collapse; margin:8px 0 16px; font-size:13px; background:var(--panel); border-radius:8px; overflow:hidden; }
+th,td { padding:8px 10px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+th { background:#1f2937; color:var(--accent); font-weight:600; font-size:12px; }
+.callout { background:var(--panel); border-left:3px solid var(--accent); padding:10px 14px; margin:10px 0; font-size:13px; border-radius:4px; }
+.callout.warn { border-left-color:var(--orange); }
+.callout.danger { border-left-color:var(--red); }
+.callout.success { border-left-color:var(--green); }
+.bad { color:var(--red); } .good { color:var(--green); } .yellow { color:var(--yellow); }
+a { color:var(--accent); text-decoration:none; }
+ul { margin-left:20px; font-size:13px; }
+.scenario { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; margin:12px 0; }
+.scenario h3 { margin-top:0; }
+@media (max-width:600px) { body{padding:10px;font-size:14px;} table{font-size:11px;} th,td{padding:5px 6px;} }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  📂 <a href="index.html">VR200 主報告</a>
+  📊 <a href="stocks.html">個股深挖</a>
+  🧮 <a href="backtest.html">情境試算（你在這）</a>
+  📝 <a href="https://github.com/snese/vr200-rubin-research">GitHub</a>
+</div>
+
+<h1>🧮 情境試算 — VR200 爆擊預算分配模擬</h1>
+<div class="sub">2026-05-21 · 基於過去 1 年實際報酬的 DCA 模擬</div>
+
+<div class="callout danger">
+⚠️ <strong>假設與限制（必讀）：</strong>
+<ul>
+<li>數字基於<strong>過去 1 年實際報酬</strong>，過去績效 ≠ 未來績效</li>
+<li>DCA 報酬用「期間中位點報酬 / 2」近似（簡化模型）</li>
+<li>不含手續費、匯率變動、稅</li>
+<li><strong>這是教學模擬，不是投資建議</strong></li>
+</ul>
+</div>
+
+<h2>情境 A：每月固定 NT$30,000，分散到 VR200 爆擊清單</h2>
+
+<table>
+<tr><th>比例</th><th>金額/月</th><th>標的</th><th>1Y 單筆報酬</th><th>DCA 估算</th></tr>
+<tr><td>50%</td><td>NT$15,000</td><td>DRAM ETF</td><td>+86%</td><td>~+43%</td></tr>
+<tr><td>20%</td><td>NT$6,000</td><td>臻鼎 4958</td><td>~+150%</td><td>~+75%</td></tr>
+<tr><td>15%</td><td>NT$4,500</td><td>富世達 6805</td><td>~+200%</td><td>~+100%</td></tr>
+<tr><td>10%</td><td>NT$3,000</td><td>立隆電 2472</td><td>~+100%</td><td>~+50%</td></tr>
+<tr><td>5%</td><td>NT$1,500</td><td>信昌電 6173</td><td>~+150%</td><td>~+75%</td></tr>
+</table>
+
+<div class="scenario">
+<h3>1 年累積：投入 NT$ 360,000</h3>
+<table>
+<tr><th>情境</th><th>條件</th><th>估算現值</th><th>報酬</th></tr>
+<tr><td class="good">🟢 樂觀</td><td>多頭續強，HBM 短缺持續</td><td>~NT$ 540,000</td><td class="good">+50%</td></tr>
+<tr><td class="yellow">🟡 基準</td><td>類似過去 1 年表現</td><td>~NT$ 460,000</td><td>+28%</td></tr>
+<tr><td class="bad">🔴 悲觀</td><td>HBM4 短缺解決、AI 泡沫</td><td>~NT$ 320,000</td><td class="bad">-11%</td></tr>
+</table>
+</div>
+
+<h2>情境 B：你目前部位 vs 替代方案（過去 1 年回測）</h2>
+
+<p style="font-size:13px;color:var(--muted);">假設「每月扣 NT$30,000，扣 12 個月，累積投入 NT$360,000」。對比實際 1Y 報酬：</p>
+
+<table>
+<tr><th>標的</th><th>1Y 單筆報酬</th><th>DCA 估算</th><th>現值估算</th></tr>
+<tr><td><strong>安聯台灣科技</strong>（你目前月扣）</td><td>+252.81% 🚀</td><td>~+126%</td><td><strong class="good">~NT$ 815,000</strong></td></tr>
+<tr><td>00735 國泰台韓科技</td><td>+209.15%</td><td>~+105%</td><td>~NT$ 738,000</td></tr>
+<tr><td>NVDA（你已有）</td><td>~+50% 估</td><td>~+25%</td><td>~NT$ 450,000</td></tr>
+<tr><td>DRAM ETF（如果 1Y 前就有買）</td><td>+86%</td><td>~+43%</td><td>~NT$ 515,000</td></tr>
+<tr><td>0050（老婆持有）</td><td>+44% 估</td><td>~+22%</td><td>~NT$ 440,000</td></tr>
+<tr><td>0050 正二</td><td>~+88% 估</td><td>~+44%</td><td>~NT$ 520,000</td></tr>
+</table>
+
+<div class="callout success">
+<strong>結論 1：</strong>過去 1 年安聯台灣科技 +252% 確實大贏 0050 +44%，是你「繼續扣」的合理基礎。
+</div>
+
+<div class="callout warn">
+<strong>結論 2：</strong>但 1Y 太短。長期來看：
+<ul>
+<li>5Y：安聯科技 ~340% vs 0050 146% vs 正二 304%（Instagram 來源）</li>
+<li>內扣 1.6% × 20Y 累積複利侵蝕 ~27%（理論值）</li>
+<li>主動基金能否持續贏大盤是長期議題</li>
+</ul>
+</div>
+
+<h2>情境 C：機會成本分析（你最該問自己）</h2>
+
+<div class="scenario">
+<h3>選項 1：維持現狀</h3>
+<p>繼續月扣 30K 安聯，過去 1 年 +252%。風險：未來表現可能反轉，內扣長期侵蝕。</p>
+<p><span class="good">✅ 適合：</span>長期持有 + 不想花心力擇股</p>
+</div>
+
+<div class="scenario">
+<h3>選項 2：拆 50/50（穩健派）</h3>
+<p>15K 月扣安聯 + 15K 投入 VR200 爆擊清單（按情境 A 比例縮 50%）</p>
+<p><span class="good">✅ 適合：</span>想吃 VR200 故事但不想全押</p>
+<p><span class="yellow">🟡 風險：</span>分散後爆擊力減弱</p>
+</div>
+
+<div class="scenario">
+<h3>選項 3：全砍掉換 ETF</h3>
+<p>停扣安聯，30K 全進 VR200 爆擊清單</p>
+<p><span class="bad">❌ 不建議：</span>放棄安聯 5Y 實證績效太可惜，且爆擊清單已有部分追高風險</p>
+</div>
+
+<h2>📊 視覺化對比：1 年累積投入 NT$360K → 估算現值</h2>
+
+<div style="background:var(--panel);padding:14px;border-radius:8px;font-size:12px;font-family:monospace;">
+<div style="margin-bottom:8px;">安聯台灣科技 ████████████████████████████████ NT$815K (+126%)</div>
+<div style="margin-bottom:8px;">00735         ████████████████████████████ NT$738K (+105%)</div>
+<div style="margin-bottom:8px;">爆擊組合(基準)████████████████████ NT$460K (+28%)</div>
+<div style="margin-bottom:8px;">DRAM ETF      █████████████████████ NT$515K (+43%)</div>
+<div style="margin-bottom:8px;">正二          █████████████████████ NT$520K (+44%)</div>
+<div style="margin-bottom:8px;">NVDA          ██████████████████ NT$450K (+25%)</div>
+<div style="margin-bottom:8px;">0050          █████████████████ NT$440K (+22%)</div>
+</div>
+
+<div class="callout warn">
+⚠️ <strong>反直覺發現：</strong>過去 1 年「安聯科技 + 00735」這兩個你問過的標的，都打贏了我推薦的「VR200 爆擊組合」。這代表：
+<ul>
+<li>市場已經 price-in 大量 VR200 預期</li>
+<li>主動基金經理人選股確實有 alpha（過去 1 年）</li>
+<li><strong>新加部位是賭「下一年仍能複製」</strong>，不是賭「找到新標的」</li>
+</ul>
+</div>
+
+<h2>🎯 我的最終建議（誠實版）</h2>
+
+<div class="callout success">
+<strong>給你的真心話：</strong>
+<ol>
+<li><strong>不要動安聯科技月扣</strong> — 過去績效太強，停掉是浪費</li>
+<li><strong>0050 正二跟老婆討論一下槓桿損耗</strong>（不是要她賣，是確認她懂機制）</li>
+<li><strong>新資金</strong>分批進 VR200 爆擊清單，但<strong>分 3-6 個月分批進場</strong>，不要一次梭哈</li>
+<li>如果不想花心力選股，<strong>多買 00735 + DRAM 兩檔 ETF 就夠了</strong>（懶人版）</li>
+<li>如果想押爆擊新故事，<strong>立隆電 2472 是純度最高的單一標的</strong>（國票目標 286 元，未 price-in 較多）</li>
+</ol>
+</div>
+
+<div class="callout danger">
+⚠️ <strong>最重要提醒：</strong>
+<ul>
+<li>過去績效 ≠ 未來績效</li>
+<li>所有數字都是 1Y 回測，未來不一定如此</li>
+<li><strong>分批進場 &gt; 一次梭哈</strong> — 這是唯一的真理</li>
+<li>投資有風險，請自行評估</li>
+</ul>
+</div>
+
+<div style="margin-top:30px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;">
+情境試算 2026-05-21 · 不是投資建議
+</div>
+
+</body>
+</html>
