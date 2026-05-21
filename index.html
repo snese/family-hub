@@ -3,82 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HC 家庭資訊站 / HC Family Hub</title>
+<title>家庭資訊站 / Family Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg-base: #0a0a0f;
+  --bg-elevated: #12121a;
+  --surface: rgba(255,255,255,0.03);
+  --surface-hover: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.16);
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255,255,255,0.65);
+  --text-tertiary: rgba(255,255,255,0.4);
+  --accent-1: #7c3aed;
+  --accent-2: #06b6d4;
+  --accent-3: #f59e0b;
+  --shadow-lg: 0 20px 60px -10px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 60px rgba(124,58,237,0.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-  font-family:-apple-system,"Helvetica Neue","PingFang TC","Noto Sans TC",sans-serif;
-  background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);
-  color:#e6edf3; min-height:100vh; padding:24px 16px;
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
 }
-.wrap { max-width:900px; margin:auto; }
-header { text-align:center; margin-bottom:32px; padding:30px 0; }
-header h1 { font-size:32px; margin-bottom:8px; background:linear-gradient(135deg,#58a6ff,#a371f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-header p { color:#8b949e; font-size:14px; }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124,58,237,0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.10), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 60%, rgba(245,158,11,0.06), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; position: relative; z-index: 1; }
+header { padding: 60px 0 50px; text-align: center; }
+.eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+h1 {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.tagline {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 0 auto 8px;
+  font-weight: 400;
+}
+.tagline-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 48px 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
 .card {
-  background:#161b22; border:1px solid #30363d; border-radius:14px;
-  padding:22px; transition:all 0.2s; cursor:pointer;
-  text-decoration:none; color:inherit; display:block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
 }
-.card:hover { border-color:#58a6ff; transform:translateY(-2px); box-shadow:0 8px 24px rgba(88,166,255,0.15); }
-.card .icon { font-size:32px; margin-bottom:10px; }
-.card h2 { font-size:18px; margin-bottom:8px; color:#58a6ff; }
-.card p { font-size:13px; color:#8b949e; line-height:1.6; }
-.card .meta { margin-top:12px; padding-top:12px; border-top:1px solid #30363d; font-size:11px; color:#6e7681; }
-.tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; margin-right:6px; }
-.tag-active { background:#1f6feb33; color:#58a6ff; }
-.tag-soon { background:#d2992233; color:#d29922; }
-footer { text-align:center; margin-top:40px; padding:20px; color:#6e7681; font-size:12px; }
-@media (max-width:600px) { header h1{font-size:26px;} .card{padding:18px;} }
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(124,58,237,0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.card:hover {
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.card:hover::before { opacity: 1; }
+.card-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 18px;
+  transition: all 0.3s;
+}
+.card:hover .card-icon {
+  background: rgba(124,58,237,0.15);
+  border-color: rgba(124,58,237,0.3);
+}
+.card h2 {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.card-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.card-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+.tag-active { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+.tag-soon { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+.tag-decision { background: rgba(6,182,212,0.12); color: #06b6d4; border: 1px solid rgba(6,182,212,0.25); }
+.timestamp { font-size: 11px; color: var(--text-tertiary); font-family: 'JetBrains Mono', monospace; }
+.arrow {
+  display: inline-block;
+  margin-left: 4px;
+  transition: transform 0.3s;
+}
+.card:hover .arrow { transform: translateX(4px); }
+footer {
+  margin-top: 80px;
+  padding: 32px 0 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.8;
+}
+footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+footer a:hover { color: var(--text-primary); }
+.divider { color: var(--text-tertiary); margin: 0 8px; }
+@media (max-width: 600px) {
+  .container { padding: 16px 16px 60px; }
+  header { padding: 32px 0 24px; }
+  .card { padding: 22px; }
+}
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<div class="container">
 
 <header>
-<h1>🏠 HC 家庭資訊站</h1>
-<p>HC Family Hub · 投資研究 + 生活決策報告</p>
+  <div class="eyebrow">Private · Family Edition</div>
+  <h1>家庭資訊站</h1>
+  <p class="tagline">投資研究 · 生活決策 · 自動化資訊彙整</p>
+  <p class="tagline-en">Investment Research · Life Decisions · Automated Briefings</p>
 </header>
+
+<div class="section-label">📂 Active Projects</div>
 
 <div class="grid">
 
 <a class="card" href="vr200/">
-<div class="icon">🚀</div>
-<h2>VR200 Rubin 供應鏈研究</h2>
-<p>NVIDIA Vera Rubin AI 機櫃供應鏈深度地圖、台股/美股 11 族群、個股深挖、情境試算。</p>
-<div class="meta">
-<span class="tag tag-active">📊 Active</span>
-更新 2026-05-21
-</div>
+  <div class="card-icon">🚀</div>
+  <h2>VR200 Rubin 供應鏈研究</h2>
+  <div class="card-en">Vera Rubin Supply Chain · Investment</div>
+  <p class="card-desc">NVIDIA Vera Rubin AI 機櫃供應鏈深度地圖。11 大族群、台股/美股對標、個股深挖、情境試算。</p>
+  <div class="card-meta">
+    <span class="tag tag-active">● ACTIVE</span>
+    <span class="timestamp">Updated 2026-05-21<span class="arrow">→</span></span>
+  </div>
 </a>
 
 <a class="card" href="linkou-rental/">
-<div class="icon">🏘️</div>
-<h2>林口出租決策報告</h2>
-<p>林口長庚醫護家庭出租定位 v1：TA 分析、租金行情、裝修預算、鎖定客群策略。</p>
-<div class="meta">
-<span class="tag tag-active">🏠 Decision</span>
-更新 2026-05-18
-</div>
+  <div class="card-icon">🏘️</div>
+  <h2>林口出租決策報告</h2>
+  <div class="card-en">Linkou Rental · Decision v1</div>
+  <p class="card-desc">林口長庚醫護家庭出租定位 v1。TA 深度分析、租金行情、裝修預算、客群鎖定策略。</p>
+  <div class="card-meta">
+    <span class="tag tag-decision">● DECISION</span>
+    <span class="timestamp">Updated 2026-05-18<span class="arrow">→</span></span>
+  </div>
 </a>
 
 <a class="card" href="vr200/news.html">
-<div class="icon">📰</div>
-<h2>VR200 新聞週報</h2>
-<p>每週 Cron 自動彙整 VR200 / Rubin / HBM4 / 台股供應鏈相關新聞。</p>
-<div class="meta">
-<span class="tag tag-soon">⏰ 每週日</span>
-首次更新中
-</div>
+  <div class="card-icon">📰</div>
+  <h2>VR200 新聞週報</h2>
+  <div class="card-en">Weekly Digest · Auto</div>
+  <p class="card-desc">每週日自動彙整 VR200 / Rubin / HBM4 / 台股供應鏈新聞、法人觀點、風險訊號。</p>
+  <div class="card-meta">
+    <span class="tag tag-soon">◐ WEEKLY</span>
+    <span class="timestamp">Sun 09:00 TPE<span class="arrow">→</span></span>
+  </div>
 </a>
 
 </div>
 
 <footer>
-🔒 此網站不含個人財務數字 · 投資內容僅為資訊整理，非投資建議<br>
-📁 Source: <a href="https://github.com/snese/vr200-rubin-research" style="color:#58a6ff;">GitHub</a>
+  🔒 私人家庭資訊 · 投資內容僅為資訊整理，非投資建議<br>
+  <span class="divider">·</span>
+  <a href="https://github.com/snese/vr200-rubin-research">GitHub</a>
+  <span class="divider">·</span>
+  Built with care
 </footer>
 
 </div>
