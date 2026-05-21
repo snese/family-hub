@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>林口出租決策報告 v1（2026-05-18）</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.75;
+    color: #1f2937;
+    background: #f4f4f5;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 18px 80px;
+  }
+  header.hero {
+    background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%);
+    color: #fff;
+    padding: 28px 22px;
+    border-radius: 16px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px rgba(15,118,110,0.25);
+  }
+  header.hero h1 {
+    font-size: 26px;
+    margin: 0 0 8px;
+    line-height: 1.35;
+    letter-spacing: 0.5px;
+  }
+  header.hero .sub {
+    font-size: 14px;
+    opacity: 0.92;
+    margin: 0;
+  }
+  header.hero .meta {
+    margin-top: 14px;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  h2 {
+    font-size: 22px;
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0f766e;
+    color: #0f766e;
+    letter-spacing: 0.3px;
+  }
+  h3 {
+    font-size: 18px;
+    margin: 22px 0 10px;
+    color: #134e4a;
+  }
+  p { margin: 0 0 12px; }
+
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 18px;
+    margin: 12px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+  }
+
+  /* 物件基本資料 */
+  .property-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .property-grid .item {
+    background: #f0fdfa;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border-left: 4px solid #14b8a6;
+  }
+  .property-grid .item .label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+  }
+  .property-grid .item .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #134e4a;
+  }
+  .property-grid .item.full { grid-column: 1 / -1; }
+
+  /* TA 兩欄並列 */
+  .ta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .ta-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 14px;
+    border: 2px solid #e5e7eb;
+  }
+  .ta-card.tier1 { border-color: #f59e0b; background: #fffbeb; }
+  .ta-card.tier2 { border-color: #3b82f6; background: #eff6ff; }
+  .ta-card .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .ta-card.tier1 .tag { background: #f59e0b; }
+  .ta-card.tier2 .tag { background: #3b82f6; }
+  .ta-card h4 {
+    font-size: 16px;
+    margin: 0 0 8px;
+    color: #1f2937;
+  }
+  .ta-card .stat {
+    font-size: 14px;
+    margin: 6px 0;
+    color: #374151;
+  }
+  .ta-card .stat strong { color: #111827; }
+  .ta-card ul {
+    margin: 10px 0 0;
+    padding-left: 20px;
+    font-size: 14px;
+  }
+  .ta-card ul li { margin-bottom: 4px; }
+
+  /* 租金條形圖 */
+  .rent-chart { margin: 20px 0; }
+  .rent-bar-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 80px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .rent-bar-row .scenario {
+    font-size: 13px;
+    color: #374151;
+    font-weight: 600;
+  }
+  .rent-bar-track {
+    background: #e5e7eb;
+    height: 28px;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .rent-bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .rent-bar-fill.low { background: linear-gradient(90deg, #94a3b8, #64748b); }
+  .rent-bar-fill.mid { background: linear-gradient(90deg, #14b8a6, #0d9488); }
+  .rent-bar-fill.high { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .rent-bar-fill.top  { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  .rent-bar-row .price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    text-align: right;
+  }
+
+  .anchor-note {
+    background: #ecfeff;
+    border-left: 4px solid #06b6d4;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+
+  /* Q1 / Q2 highlight */
+  .q-box {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px dashed #d97706;
+    border-radius: 14px;
+    padding: 20px 18px;
+    margin: 18px 0;
+    box-shadow: 0 4px 14px rgba(217,119,6,0.15);
+  }
+  .q-box .qtag {
+    display: inline-block;
+    background: #d97706;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .q-box h3 {
+    margin: 0 0 8px;
+    color: #78350f;
+    font-size: 18px;
+  }
+  .q-box p { color: #78350f; font-size: 15px; }
+  .q-box .options {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .q-box .options li { margin-bottom: 6px; }
+
+  /* 預算表格 */
+  table.budget {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  table.budget th, table.budget td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  table.budget th {
+    background: #f0fdfa;
+    color: #134e4a;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  table.budget td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  table.budget tr.total {
+    background: #fef3c7;
+    font-weight: 700;
+  }
+  table.budget tr.total td { border-bottom: none; }
+  table.budget tr.subhead td {
+    background: #f9fafb;
+    font-weight: 700;
+    color: #6b7280;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* 風險與機會 */
+  .ro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .ro-card {
+    border-radius: 12px;
+    padding: 16px 14px;
+    border: 1px solid #e5e7eb;
+  }
+  .ro-card.risk { background: #fef2f2; border-color: #fca5a5; }
+  .ro-card.opp  { background: #f0fdf4; border-color: #86efac; }
+  .ro-card h4 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+  .ro-card.risk h4 { color: #991b1b; }
+  .ro-card.opp h4 { color: #14532d; }
+  .ro-card ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+  }
+  .ro-card ul li { margin-bottom: 6px; }
+
+  /* 信心標籤 */
+  .conf {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .conf.h { background: #d1fae5; color: #065f46; }
+  .conf.m { background: #fef3c7; color: #92400e; }
+  .conf.l { background: #fee2e2; color: #991b1b; }
+
+  /* CTA */
+  .cta {
+    background: linear-gradient(135deg, #0f766e 0%, #134e4a 100%);
+    color: #fff;
+    text-align: center;
+    padding: 28px 22px;
+    border-radius: 16px;
+    margin-top: 32px;
+    box-shadow: 0 6px 20px rgba(15,118,110,0.3);
+  }
+  .cta h3 {
+    color: #fff;
+    margin: 0 0 10px;
+    font-size: 20px;
+  }
+  .cta p {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.95;
+    line-height: 1.7;
+  }
+
+  /* Sources */
+  details.sources {
+    margin-top: 28px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+  }
+  details.sources summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #0f766e;
+    font-size: 15px;
+    padding: 6px 0;
+    list-style: none;
+  }
+  details.sources summary::-webkit-details-marker { display: none; }
+  details.sources summary::before {
+    content: "▶ ";
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  details.sources[open] summary::before {
+    transform: rotate(90deg);
+  }
+  details.sources ul {
+    margin: 12px 0 0;
+    padding-left: 20px;
+    font-size: 13px;
+    color: #4b5563;
+  }
+  details.sources ul li { margin-bottom: 6px; word-break: break-all; }
+  details.sources a { color: #0e7490; }
+
+  /* tag badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge.green { background: #d1fae5; color: #065f46; }
+  .badge.blue { background: #dbeafe; color: #1e40af; }
+  .badge.amber { background: #fef3c7; color: #92400e; }
+
+  /* responsive — phone < 600 */
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .wrap { padding: 16px 14px 60px; }
+    header.hero { padding: 22px 18px; border-radius: 12px; }
+    header.hero h1 { font-size: 22px; }
+    h2 { font-size: 20px; margin-top: 28px; }
+    h3 { font-size: 17px; }
+    .property-grid { grid-template-columns: 1fr; }
+    .ta-grid { grid-template-columns: 1fr; }
+    .ro-grid { grid-template-columns: 1fr; }
+    .rent-bar-row {
+      grid-template-columns: 70px 1fr 70px;
+      gap: 8px;
+    }
+    .rent-bar-row .scenario { font-size: 12px; }
+    .rent-bar-row .price { font-size: 13px; }
+    table.budget { font-size: 13px; }
+    table.budget th, table.budget td { padding: 8px 6px; }
+  }
+
+  /* dark mode friendly tweaks */
+  @media (prefers-color-scheme: dark) {
+    body { background: #0f172a; color: #e5e7eb; }
+    .card, .ta-card, .ro-card, table.budget, details.sources {
+      background: #1e293b;
+      border-color: #334155;
+      color: #e5e7eb;
+    }
+    .ta-card.tier1 { background: #422006; }
+    .ta-card.tier2 { background: #172554; }
+    .ro-card.risk { background: #450a0a; }
+    .ro-card.opp { background: #052e16; }
+    .property-grid .item { background: #134e4a; color: #d1fae5; }
+    .property-grid .item .label { color: #99f6e4; }
+    .property-grid .item .value { color: #f0fdfa; }
+    table.budget th { background: #134e4a; color: #f0fdfa; }
+    table.budget tr.subhead td { background: #0f172a; color: #94a3b8; }
+    table.budget tr.total { background: #422006; color: #fef3c7; }
+    .anchor-note { background: #164e63; color: #cffafe; }
+    h2 { color: #5eead4; border-color: #5eead4; }
+    h3, .ta-card h4 { color: #99f6e4; }
+    .q-box { background: linear-gradient(135deg, #422006 0%, #78350f 100%); border-color: #f59e0b; }
+    .q-box h3, .q-box p { color: #fef3c7; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>🏠 林口出租決策報告 v1</h1>
+  <p class="sub">給太太：請看完後告訴我們你對 <strong>Q1 / Q2</strong> 的想法</p>
+  <p class="meta">物件：長耀加 36 坪 3F · 報告日：2026-05-18 · 信心整體：🟢 高</p>
+</header>
+
+<!-- 1. 物件基本資料 -->
+<h2>📍 物件基本資料</h2>
+<div class="card">
+  <div class="property-grid">
+    <div class="item full">
+      <div class="label">社區 / 樓層</div>
+      <div class="value">長耀加 · F 棟 3F</div>
+    </div>
+    <div class="item">
+      <div class="label">坪數</div>
+      <div class="value">36 坪 · 3 房</div>
+    </div>
+    <div class="item">
+      <div class="label">車位</div>
+      <div class="value">平面 1 個</div>
+    </div>
+    <div class="item">
+      <div class="label">購入價</div>
+      <div class="value">2,029 萬</div>
+    </div>
+    <div class="item">
+      <div class="label">交屋 / 上架</div>
+      <div class="value">7 月底 / 12 月</div>
+    </div>
+    <div class="item full">
+      <div class="label">位置（GPS 25.0764, 121.3686）</div>
+      <div class="value" style="font-size:14px;">文化三路一段 555 巷 79 號旁</div>
+    </div>
+  </div>
+  <p style="margin-top:16px; font-size:14px; line-height:1.7;">
+    <strong>5 合 1 黃金中心</strong><span class="conf h">H</span>：所有核心 POI 都在 10 分鐘車程內 ——
+    林口長庚 5–7 分、華亞園區（廣達+美光+穩懋共 22,000+ 員工）5–10 分、A9 機捷 12–15 分步行、康橋國際 4–6 分、三井 Outlet 步行 10 分、國 1 林口交流道 5–7 分。
+  </p>
+</div>
+
+<!-- 2. TA 比較 -->
+<h2>🎯 鎖定的房客類型（TA）</h2>
+<p style="font-size:14px; color:#6b7280;">策略：主打 Tier 1 醫師家庭，副打 Tier 2 工程師家庭，雙軌並行</p>
+
+<div class="ta-grid">
+  <div class="ta-card tier1">
+    <span class="tag">⭐ TIER 1 主打</span>
+    <h4>林口長庚新進主治醫師家庭</h4>
+    <div class="stat">📊 池子規模：<strong>200–500 戶/年</strong> 新陳代謝<span class="conf m">M</span></div>
+    <div class="stat">💰 家戶月入：<strong>20–40 萬</strong><span class="conf h">H</span></div>
+    <div class="stat">🏷️ 月租上限：<strong>6 萬+</strong></div>
+    <div class="stat">⏱️ 通勤：醫院 5 分（值班剛性需求）</div>
+    <ul>
+      <li>必要：3 房 + 平面車位 + 新成屋</li>
+      <li>加分：康橋國際 5 分、A9 走路可達</li>
+      <li>付得起：長庚 2024 招主治第一年保障 65 萬／月</li>
+    </ul>
+  </div>
+
+  <div class="ta-card tier2">
+    <span class="tag">⭐ TIER 2 副打</span>
+    <h4>華亞園區工程師雙薪家庭</h4>
+    <div class="stat">📊 池子規模：<strong>22,000+ 員工</strong>（廣達/美光/穩懋）<span class="conf h">H</span></div>
+    <div class="stat">💰 家戶月入：<strong>15–25 萬</strong><span class="conf h">H</span></div>
+    <div class="stat">🏷️ 月租上限：<strong>5–6 萬</strong></div>
+    <div class="stat">⏱️ 通勤：園區 5–10 分（不用上高速）</div>
+    <ul>
+      <li>必要：3 房 + 車位 + 純住宅社區</li>
+      <li>加分：A9 機捷可達（太太常去台北）</li>
+      <li>注意：三大廠都<strong>沒有</strong>住房補貼，會 negotiate 1–2K</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 3. 租金期望區間 -->
+<h2>💰 租金期望區間</h2>
+<div class="card">
+  <p style="margin:0 0 6px;">文化三路一段每坪租金中位 <strong>1,289–1,400 元/坪/月</strong><span class="conf h">H</span></p>
+  <p style="font-size:14px; color:#6b7280;">36 坪 × 1,289–1,400 = 月租 <strong>46,400–50,400</strong></p>
+
+  <div class="rent-chart">
+    <div class="rent-bar-row">
+      <div class="scenario">底線</div>
+      <div class="rent-bar-track"><div class="rent-bar-fill low" style="width:62%;">P50</div></div>
+      <div class="price">42,000</div>
+    </div>
+    <div class="rent-bar-row">
+      <div class="scenario">保守</div>
+      <div class="rent-bar-track"><div class="rent-bar-fill mid" style="width:67%;">P55</div></div>
+      <div class="price">45,000</div>
+    </div>
+    <div class="rent-bar-row">
+      <div class="scenario">⭐ 起價</div>
+      <div class="rent-bar-track"><div class="rent-bar-fill high" style="width:72%;">P70</div></div>
+      <div class="price">48,000</div>
+    </div>
+    <div class="rent-bar-row">
+      <div class="scenario">樂觀</div>
+      <div class="rent-bar-track"><div class="rent-bar-fill top" style="width:77%;">P80</div></div>
+      <div class="price">50,000</div>
+    </div>
+  </div>
+
+  <div class="anchor-note">
+    🎯 <strong>錨點</strong>：<strong>德馨居三期</strong>（同條路 39 巷，距 555 巷 &lt;800m）<br>
+    49,800 元/月 · 36 坪 · 1,383 元/坪 — 我們物件<strong>最強單筆參考</strong><span class="conf h">H</span>
+  </div>
+
+  <h3 style="margin-top:18px;">建議掛牌節奏</h3>
+  <ul style="font-size:14px; padding-left:20px; margin:0;">
+    <li><strong>W1–W4</strong>：起價 48,000 + 完整家具 + 英文合約 → 鎖醫師/工程師家庭</li>
+    <li><strong>W3–W4</strong>：看屋若 &lt;5 組 → 降至 45,000</li>
+    <li><strong>W5+</strong>：仍未成交 → 開放雙薪通勤族 42,000（底線）</li>
+  </ul>
+</div>
+
+<!-- 4. Q1 highlight box -->
+<h2>❓ 太太需要回答的問題</h2>
+
+<div class="q-box">
+  <span class="qtag">Q1</span>
+  <h3>你能容忍多久空置時間？</h3>
+  <p>這影響我們的<strong>定價策略</strong>和<strong>底線</strong>：</p>
+  <ul class="options">
+    <li>🅰️ <strong>我願意空 1–2 個月找對的人</strong> → 起價 48K，鎖高品質 TA，底線堅持 45K</li>
+    <li>🅱️ <strong>能 2 週內成交最好</strong> → 起價 45K，快速放線，底線下到 42K</li>
+    <li>🅲️ <strong>我焦慮，3 週沒人就要降</strong> → 起價 46K，週週微調</li>
+  </ul>
+  <p style="margin-top:12px; font-size:14px;"><strong>HC + Qpon 建議：A</strong>。寧可空 1–2 個月找到對的人，也不要急降租金 → 接到品質差的房客 → 後續維修+換租成本更高。</p>
+</div>
+
+<!-- 5. 預算 breakdown -->
+<h2>🛍️ 採購預算 Breakdown</h2>
+<p style="font-size:14px; color:#6b7280;">三大區塊：家電、家具+軟裝、裝潢工程。我們建議「<strong>次高端骨幹 + 真高端點綴</strong>」路線。</p>
+
+<table class="budget">
+  <thead>
+    <tr><th>類別</th><th style="text-align:right;">經濟版 (NT$)</th><th style="text-align:right;">建議版 (NT$)</th></tr>
+  </thead>
+  <tbody>
+    <tr class="subhead"><td colspan="3">🔌 家電（不含建商已附冷氣）</td></tr>
+    <tr><td>冰箱（Panasonic 610L 三門）</td><td class="num">38,000</td><td class="num">38,000</td></tr>
+    <tr><td>洗衣機（Panasonic 17kg 滾筒）</td><td class="num">32,000</td><td class="num">32,000</td></tr>
+    <tr><td>乾衣機（Panasonic NH-70G）</td><td class="num">12,000</td><td class="num">12,000</td></tr>
+    <tr><td>65" 電視（Sony X85L）</td><td class="num">40,000</td><td class="num">40,000</td></tr>
+    <tr><td>蒸烤箱（Panasonic NN-BS603 27L）</td><td class="num">17,000</td><td class="num">17,000</td></tr>
+    <tr><td>洗碗機（Panasonic 6 人份桌上型）</td><td class="num">22,000</td><td class="num">22,000</td></tr>
+    <tr><td>抽油煙機（Rinnai RH-9128 倒 T）</td><td class="num">30,000</td><td class="num">30,000</td></tr>
+    <tr><td>飲水機（賀眾 RO 純水溫熱）</td><td class="num">16,000</td><td class="num">16,000</td></tr>
+    <tr><td><strong>家電小計</strong></td><td class="num"><strong>207,000</strong></td><td class="num"><strong>207,000</strong></td></tr>
+
+    <tr class="subhead"><td colspan="3">🛋️ 家具 + 軟裝</td></tr>
+    <tr><td>主臥（IKEA 床架 + Beautyrest 床墊）</td><td class="num">68,000</td><td class="num">96,000</td></tr>
+    <tr><td>次臥 ×2（床架 + 床墊 + 書桌）</td><td class="num">112,000</td><td class="num">112,000</td></tr>
+    <tr><td>客廳（IKEA KIVIK 沙發 + 電視櫃 + 茶几 + 地毯）</td><td class="num">53,000</td><td class="num">53,000</td></tr>
+    <tr><td>餐廳（IKEA 橡木餐桌 + Carl Hansen Y-Chair ×6）<span class="badge amber">亮點</span></td><td class="num">44,000</td><td class="num">165,000</td></tr>
+    <tr><td>玄關（鞋櫃穿鞋椅）</td><td class="num">12,000</td><td class="num">12,000</td></tr>
+    <tr><td>軟裝（Yvonne 棉寢具 + 進口窗簾 + 浴巾）</td><td class="num">41,000</td><td class="num">110,000</td></tr>
+    <tr><td><strong>家具+軟裝小計</strong></td><td class="num"><strong>330,000</strong></td><td class="num"><strong>548,000</strong></td></tr>
+
+    <tr class="subhead"><td colspan="3">🔨 裝潢工程</td></tr>
+    <tr><td>全室油漆（批土 + 乳膠漆 36 坪）</td><td class="num">79,200</td><td class="num">79,200</td></tr>
+    <tr><td>系統櫃（玄關+主臥+次臥+廚房補強 9.3 延尺）</td><td class="num">108,900</td><td class="num">108,900</td></tr>
+    <tr><td>木地板（超耐磨 26 坪含批土）</td><td class="num">106,600</td><td class="num">106,600</td></tr>
+    <tr><td>燈具（含 Hue 智慧燈帶點綴）</td><td class="num">57,360</td><td class="num">57,360</td></tr>
+    <tr><td>Mesh WiFi 6（ASUS 三入）</td><td class="num">25,000</td><td class="num">25,000</td></tr>
+    <tr><td><strong>裝潢小計</strong></td><td class="num"><strong>377,060</strong></td><td class="num"><strong>377,060</strong></td></tr>
+
+    <tr class="total">
+      <td>🎯 合計</td>
+      <td class="num">914,060</td>
+      <td class="num">1,132,060</td>
+    </tr>
+  </tbody>
+</table>
+
+<p style="font-size:13px; color:#6b7280; margin-top:10px;">
+  <strong>建議版差別</strong>：升級主臥床墊為 Beautyrest World Class（醫師在意睡眠）+ 餐廳放 Carl Hansen Y-Chair ×6 當決勝視覺亮點 + 進口窗簾與棉寢具。<br>
+  <strong>回收期</strong>：以月租 48K 估算，建議版約 <strong>23–24 個月</strong>回收採購成本。
+</p>
+
+<!-- 6. Q2 highlight box -->
+<div class="q-box">
+  <span class="qtag">Q2</span>
+  <h3>你的裝潢預算上限是多少？</h3>
+  <p>家電是固定的（207K），可調的是<strong>家具+軟裝+裝潢</strong>：</p>
+  <ul class="options">
+    <li>🅰️ <strong>~91 萬（經濟版）</strong>：IKEA 全套 + 國產窗簾 + 中階裝潢 → 月租天花板 ~46K</li>
+    <li>🅱️ <strong>~113 萬（建議版）</strong>：加 Carl Hansen 餐椅 + 進口寢具/窗簾 → 月租可衝到 48–50K ⭐</li>
+    <li>🅲️ <strong>140 萬+（豪華版）</strong>：B&B 沙發 + 北歐櫥窗實木 + Hue 全屋 → 但 TA 不會多付太多</li>
+  </ul>
+  <p style="margin-top:12px; font-size:14px;"><strong>HC + Qpon 建議：B</strong>。多花 22 萬（vs A），可拿到月租多 2K，3 年回本，且醫師家庭一進門 30 秒「感受到品味」。豪華版回報率太低，自住 mindset 才划算。</p>
+</div>
+
+<!-- 7. 風險與機會 -->
+<h2>⚖️ 風險與機會</h2>
+<div class="ro-grid">
+  <div class="ro-card opp">
+    <h4>✅ 機會</h4>
+    <ul>
+      <li><strong>555 巷 0 筆出租 comparable</strong> — 稀缺性反向支持高定價<span class="conf h">H</span></li>
+      <li>長庚 + 華亞 + ASML/Micron 三大池並存，TA 多元</li>
+      <li>長耀加自住率高 → 同社區競品壓力低</li>
+      <li>林口新市鎮 5 年房價 +20–30% 機會仍存</li>
+      <li>4–6 月搶第一波上架可避開 6–10 月新交屋潮</li>
+    </ul>
+  </div>
+  <div class="ro-card risk">
+    <h4>⚠️ 風險</h4>
+    <ul>
+      <li><strong>長耀建商格局警戒</strong>：交屋前花 1.5–3 萬請第三方驗屋公司<span class="conf h">H</span></li>
+      <li>長耀加自身 114 戶若同期出租 → 會自相壓價</li>
+      <li>3F 低樓層 vs 高樓層景觀戶 -5% 折價</li>
+      <li>林口交流道改善工程至 2026 年 → 尖峰塞車（不影響長庚/華亞通勤）</li>
+      <li>三大廠工程師<strong>沒有住房補貼</strong>，會 negotiate</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 8. 信心標籤說明 -->
+<div class="card" style="margin-top:18px; font-size:13px; color:#6b7280;">
+  <strong>信心標籤說明</strong>：
+  <span class="conf h">H</span> 高（多源實證）·
+  <span class="conf m">M</span> 中（單源或推估）·
+  <span class="conf l">L</span> 低（缺公開資料）
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h3>💌 太太，輪到你了</h3>
+  <p>請告訴我們你對 <strong>Q1（空置容忍）</strong> 和 <strong>Q2（裝潢預算）</strong> 的想法。<br>
+  收到回覆後，我們會把報告升級為 v2，包含具體執行時程表 + 仲介接洽名單。</p>
+</div>
+
+<!-- Sources 折疊 -->
+<details class="sources">
+  <summary>📚 資料來源（點擊展開）</summary>
+  <ul>
+    <li>591 租屋網 文化三路一段 44 筆 zoom-in（抓取日 2026-05-16）</li>
+    <li>591 德馨居三期錨點：<a href="https://rent.591.com.tw/21155979">https://rent.591.com.tw/21155979</a></li>
+    <li>591 實價長耀加：<a href="https://market.591.com.tw/5904482">https://market.591.com.tw/5904482</a></li>
+    <li>長庚醫療 Wikipedia：<a href="https://zh.wikipedia.org/zh-tw/長庚醫療財團法人林口長庚紀念醫院">林口長庚紀念醫院</a></li>
+    <li>長庚 65 萬月薪招主治：<a href="https://news.ttv.com.tw/news/11408230017200I">台視新聞</a></li>
+    <li>104 廣達電腦：<a href="https://www.104.com.tw/company/ahfsoq0">10,925 人</a></li>
+    <li>104 台灣美光：<a href="https://www.104.com.tw/company/10ww9gpk">9,000 人</a></li>
+    <li>yes123 穩懋半導體：<a href="https://www.yes123.com.tw/wk_index/comp_info.asp?p_id=50015_70752257">3,300 人</a></li>
+    <li>桃捷 A1↔A9：<a href="https://www.tymetro.com.tw/tymetro-new/tw/_pages/travel-guide/A1/A9">27 分鐘直達台北</a></li>
+    <li>Taipei Times ASML 林口廠：<a href="https://www.taipeitimes.com/News/biz/archives/2023/08/03/2003804144">2023/8 核准</a></li>
+    <li>HouseFun 醫師購屋訪談：<a href="https://news.housefun.com.tw/news/article/159667394732.html">新市鎮為熱愛點</a></li>
+    <li>家電報價：BigGo / momo / PChome（2026-05-16 抓取）</li>
+    <li>家具報價：IKEA 台灣官網 / Luxury Life Carl Hansen / Goodgo Simmons 平輸</li>
+    <li>裝潢報價：家茂裝潢部落格 / Merryann 系統櫃 / Grand Home 木地板</li>
+    <li>更多細節：研究包 research-v2/00-summary.md ~ 06b-furniture-reno.md（共 13 份報告）</li>
+  </ul>
+</details>
+
+<p style="text-align:center; font-size:12px; color:#9ca3af; margin-top:30px;">
+  Generated by Qpon · 2026-05-18 · 基於 research-v2 + 591 comps + 太太實地驗屋筆記
+</p>
+
+</div>
+</body>
+</html>
