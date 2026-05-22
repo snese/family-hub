@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家庭財務規劃 / Family Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-base: #0a0a0f;
+  --bg-elevated: #12121a;
+  --surface: rgba(255,255,255,0.03);
+  --surface-hover: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.08);
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255,255,255,0.65);
+  --text-tertiary: rgba(255,255,255,0.4);
+  --accent-1: #7c3aed;
+  --accent-2: #06b6d4;
+  --accent-3: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --yellow: #fbbf24;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.7;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+.container { max-width: 920px; margin: 0 auto; }
+.back { color: var(--text-tertiary); text-decoration: none; font-size: 14px; }
+.back:hover { color: var(--text-primary); }
+header { margin: 32px 0 48px; }
+.eyebrow {
+  display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  color: var(--accent-1); text-transform: uppercase;
+  background: rgba(124,58,237,0.1); padding: 6px 14px; border-radius: 100px;
+  border: 1px solid rgba(124,58,237,0.2); margin-bottom: 20px;
+}
+h1 { font-family: 'Noto Sans TC'; font-weight: 900; font-size: clamp(32px,5vw,48px); letter-spacing: -0.02em; margin-bottom: 12px; }
+.tagline { color: var(--text-secondary); font-size: 16px; margin-bottom: 4px; }
+.tagline-en { color: var(--text-tertiary); font-size: 13px; font-style: italic; }
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-tertiary); margin: 48px 0 16px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px; margin-bottom: 16px;
+}
+h2 { font-family: 'Noto Sans TC'; font-weight: 700; font-size: 22px; margin-bottom: 16px; }
+h3 { font-size: 16px; font-weight: 600; margin: 20px 0 10px; color: var(--text-primary); }
+p { color: var(--text-secondary); margin-bottom: 12px; font-size: 15px; }
+.kv { display: grid; grid-template-columns: 140px 1fr; gap: 8px 16px; margin: 12px 0; font-size: 15px; }
+.kv .k { color: var(--text-tertiary); }
+.kv .v { color: var(--text-primary); font-weight: 500; }
+.big-num { font-size: 36px; font-weight: 700; font-family: 'Inter'; letter-spacing: -0.02em; }
+.big-num .unit { font-size: 16px; color: var(--text-tertiary); margin-left: 6px; font-weight: 500; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+.metric { background: var(--bg-elevated); padding: 16px; border-radius: 12px; border: 1px solid var(--border); }
+.metric .label { font-size: 12px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.metric .value { font-size: 22px; font-weight: 700; }
+.metric .sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
+th { color: var(--text-tertiary); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+td { color: var(--text-secondary); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-primary); font-weight: 500; }
+.bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin: 8px 0; background: var(--bg-elevated); }
+.bar > div { height: 100%; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+.legend span::before { content: '●'; margin-right: 6px; }
+.dot-purple { color: var(--accent-1); }
+.dot-cyan { color: var(--accent-2); }
+.dot-amber { color: var(--accent-3); }
+.dot-green { color: var(--green); }
+.tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 100px; font-weight: 600; letter-spacing: 0.5px; }
+.tag-ok { background: rgba(16,185,129,0.15); color: var(--green); }
+.tag-warn { background: rgba(251,191,36,0.15); color: var(--yellow); }
+.tag-risk { background: rgba(239,68,68,0.15); color: var(--red); }
+.tag-todo { background: rgba(124,58,237,0.15); color: var(--accent-1); }
+ul { list-style: none; padding: 0; }
+ul li { padding: 8px 0 8px 24px; position: relative; color: var(--text-secondary); font-size: 15px; border-bottom: 1px dashed var(--border); }
+ul li:last-child { border-bottom: none; }
+ul li::before { content: ''; position: absolute; left: 0; top: 16px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-1); }
+ul.checklist li::before { content: '○'; background: none; color: var(--text-tertiary); top: 6px; font-size: 16px; }
+ul.checklist li.done::before { content: '✓'; color: var(--green); }
+.note { background: rgba(124,58,237,0.08); border-left: 3px solid var(--accent-1); padding: 14px 18px; border-radius: 8px; margin: 16px 0; font-size: 14px; color: var(--text-secondary); }
+.warn { background: rgba(251,191,36,0.08); border-left: 3px solid var(--yellow); padding: 14px 18px; border-radius: 8px; margin: 16px 0; font-size: 14px; color: var(--text-secondary); }
+footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); color: var(--text-tertiary); font-size: 13px; text-align: center; }
+@media (max-width: 600px) {
+  .kv { grid-template-columns: 110px 1fr; }
+  body { padding: 20px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<a class="back" href="../">← 家庭資訊站</a>
+
+<header>
+  <div class="eyebrow">Family Portfolio · 家庭財務規劃</div>
+  <h1>我們家的<br>財務全貌</h1>
+  <p class="tagline">資產配置 · 教育金 · 退休傳承</p>
+  <p class="tagline-en">Family wealth planning, simple view</p>
+</header>
+
+<div class="card">
+  <h2>📊 家庭淨值</h2>
+  <div class="big-num">3,524 <span class="unit">萬 NTD</span></div>
+  <p style="margin-top:8px">2025-11 快照（投資組合 + 不動產 − 房貸）</p>
+
+  <h3 style="margin-top:24px">資產組成</h3>
+  <div class="bar">
+    <div style="width:59.2%; background: var(--accent-1)"></div>
+    <div style="width:36.4%; background: var(--accent-2)"></div>
+    <div style="width:4.4%; background: var(--accent-3)"></div>
+  </div>
+  <div class="legend">
+    <span class="dot-purple">投資 3,312 萬（59%）</span>
+    <span class="dot-cyan">不動產 2,029 萬（36%）</span>
+    <span class="dot-amber">現金 245 萬（4%）</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>👨‍👩‍👧‍👦 家庭組成</h2>
+  <div class="kv">
+    <div class="k">HC（先生）</div><div class="v">AWS 解決方案架構師</div>
+    <div class="k">老婆</div><div class="v">穩定薪資</div>
+    <div class="k">大寶</div><div class="v">9 歲（10 年後上大學）</div>
+    <div class="k">二寶</div><div class="v">7 歲（12 年後上大學）</div>
+    <div class="k">HC 父母</div><div class="v">69 / 66 歲</div>
+    <div class="k">老婆父母</div><div class="v">待補</div>
+  </div>
+</div>
+
+<div class="section-label">🏠 房貸現況</div>
+
+<div class="card">
+  <h2>兩棟房，分階段壓力</h2>
+  <table>
+    <tr><th>房</th><th>剩餘本金</th><th>利率</th><th>備註</th></tr>
+    <tr><td>內湖（已持有）</td><td class="num">440 萬</td><td class="num">2.2%</td><td>含 500 萬增貸（付林口頭期）</td></tr>
+    <tr><td>林口（預購）</td><td class="num">1,622 萬</td><td class="num">~2.3%</td><td>銀行審批中、寬限期 36 個月</td></tr>
+  </table>
+
+  <h3>月房貸演變</h3>
+  <table>
+    <tr><th>階段</th><th>月付</th></tr>
+    <tr><td>現在（2026-05）</td><td class="num">25,770</td></tr>
+    <tr><td>林口起貸後（2026-06）</td><td class="num">~56,800</td></tr>
+    <tr><td><strong style="color:var(--yellow)">寬限期結束（2029-06）</strong></td><td class="num"><strong style="color:var(--yellow)">~105,000+</strong></td></tr>
+  </table>
+  <div class="warn">
+    <strong>2029 年 6 月後</strong>月房貸跳到 10 萬+，需要從現在開始準備緩衝。
+  </div>
+</div>
+
+<div class="section-label">🎯 7 個目標桶</div>
+
+<div class="card">
+  <h2>把錢分桶，目標分明</h2>
+  <p>每個桶有自己的時間和目的，不混在一起管理。</p>
+  <table>
+    <tr><th>桶</th><th>目標</th><th>現況</th><th>狀態</th></tr>
+    <tr><td>緊急金</td><td class="num">500-800 萬</td><td class="num">245 萬</td><td><span class="tag tag-warn">補強中</span></td></tr>
+    <tr><td>大寶教育金</td><td class="num">500-1000 萬</td><td class="num">0</td><td><span class="tag tag-risk">啟動</span></td></tr>
+    <tr><td>二寶教育金</td><td class="num">500-1000 萬</td><td class="num">0</td><td><span class="tag tag-risk">啟動</span></td></tr>
+    <tr><td>父母長照預備</td><td class="num">300-500 萬</td><td class="num">0</td><td><span class="tag tag-risk">啟動</span></td></tr>
+    <tr><td>退休主桶</td><td class="num">3000-5000 萬</td><td class="num">3,300 萬</td><td><span class="tag tag-ok">達標</span></td></tr>
+    <tr><td>跨代傳承桶</td><td class="num">持續累積</td><td class="num">部分</td><td><span class="tag tag-ok">運作中</span></td></tr>
+    <tr><td>健康基金</td><td class="num">300-500 萬</td><td class="num">0</td><td><span class="tag tag-warn">待開</span></td></tr>
+  </table>
+  <div class="note">
+    💡 我們的核心方向：<strong>不為了傳承犧牲生活品質，但讓孩子有跨代資本</strong>。
+  </div>
+</div>
+
+<div class="section-label">⚠️ 風險快照</div>
+
+<div class="card">
+  <table>
+    <tr><th>風險</th><th>狀態</th></tr>
+    <tr><td>美國遺產稅曝險（HC 美股）</td><td><span class="tag tag-warn">處理中</span></td></tr>
+    <tr><td>單一股票過度集中（雇主股 AMZN）</td><td><span class="tag tag-warn">待動作</span></td></tr>
+    <tr><td>流動性偏緊（兩棟房抵押滿）</td><td><span class="tag tag-warn">補緊急金</span></td></tr>
+    <tr><td>父母長照（5-10 年內機率上升）</td><td><span class="tag tag-warn">啟動預備</span></td></tr>
+    <tr><td>子女教育金尚未開始累積</td><td><span class="tag tag-warn">本季啟動</span></td></tr>
+    <tr><td>夫妻退休共識</td><td><span class="tag tag-todo">待討論</span></td></tr>
+  </table>
+</div>
+
+<div class="section-label">🚦 接下來的優先事項</div>
+
+<div class="card">
+  <h3>本月（最優先）</h3>
+  <ul class="checklist">
+    <li>緊急金補到 500 萬以上</li>
+    <li>美股繼承保護（IBKR 聯名 ✅、Firstrade 待設定）</li>
+    <li>把 AMZN 從公司平台轉到 IBKR 聯名</li>
+    <li>等銀行林口貸款最終條件</li>
+  </ul>
+
+  <h3>這一季</h3>
+  <ul class="checklist">
+    <li>每月固定金額啟動教育金（買全球 ETF）</li>
+    <li>父母長照預備桶開始撥款</li>
+    <li>保單盤點 + 必要補強</li>
+    <li>找一位 CFP 顧問做一次完整諮詢</li>
+    <li>夫妻聊退休願景 + 老婆父母現況</li>
+  </ul>
+
+  <h3>半年內</h3>
+  <ul class="checklist">
+    <li>個股集中度降低（漸進、避免稅務問題）</li>
+    <li>新錢全部走 IBKR + 愛爾蘭 ETF（避美國遺產稅）</li>
+    <li>HC 個人品牌累積（AWS 文章 / 演講）</li>
+    <li>遺囑訂立、保單受益人確認</li>
+  </ul>
+</div>
+
+<div class="section-label">💬 我們需要一起決定</div>
+
+<div class="card">
+  <ul>
+    <li>給孩子多少錢算夠？（先定原則，不一定要數字）</li>
+    <li>退休後想住哪？（台北、海外、彈性？）</li>
+    <li>父母長照若需要，預算如何分配？</li>
+    <li>大學若想出國念，是否預先規劃？</li>
+    <li>每年家庭旅行 / 體驗預算？</li>
+  </ul>
+  <div class="note">
+    這些問題沒有標準答案。我們慢慢聊，每次討論都會更新進這個頁面。
+  </div>
+</div>
+
+<footer>
+  🔒 私人家庭資訊 · 內容為內部規劃整理，非投資建議<br>
+  最後更新：2026-05-22
+</footer>
+
+</div>
+
+</body>
+</html>
